@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <!-- <link rel="stylesheet" href="style.css"> -->
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <style>
+    .container {
+      height: 270px;
+      margin-top: 125px;
+    }
+  </style>
+</head>
+
+<body>
+  <p style="display: none">{{ alertValue }}</p>
+  <a href="{% url 'dashboard' %}" id="home-button">Home</a>
+  <div id="welcome-user">Welcome, User!</div>
+  <div class="navbar">
+    <a href="{% url 'add' %}">Add</a>
+    <a href="{% url 'edit' %}">Edit</a>
+    <a href="{% url 'search' %}">Search</a>
+    <a href="{% url 'delete' %}" class="highlight" style="color: #05161a">Delete</a>
+    <a href="{% url 'update' %}">Update Profile</a>
+    <a href="{% url 'delete' %}" id="signOutButton" class="sign-out">Sign Out</a>
+    <script>
+      function confirmSignOut() {
+        var confirmation = confirm("Are you sure you want to sign out?");
+        if (confirmation) {
+          window.location.replace("{% url 'Redirect' %}");
+        }
+      }
+
+      document
+        .getElementById("signOutButton")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+          confirmSignOut();
+        });
+    </script>
+  </div>
+
+  <div class="container">
+    <h2>Delete Contact</h2>
+    <!-- <form id="searchContactForm" onsubmit="return validateSearchForm()"> -->
+    <form id="searchContactForm" action="{% url 'Delete' %}" method="post">
+      {% csrf_token %}
+      <input type="text" class="search-form-input" id="searchQuery" placeholder="Enter First Name or Number" name="del"
+        required />
+      <br />
+      <table>
+        <tr>
+          <td><button type="submit" class="button">Delete</button></td>
+          <td><input type="reset" class="button" value="Cancel" /></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+
+  <script>
+    function validateSearchForm() {
+      var searchQuery = document.getElementById("searchQuery").value;
+
+      if (searchQuery.trim() === "") {
+        alert("Please enter a search query.");
+        return false;
+      }
+
+      return true;
+    }
+  </script>
+  <script src="{% static 'js/script.js' %}"></script>
+</body>
+
+</html>

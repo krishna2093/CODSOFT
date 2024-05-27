@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <!-- <link rel="stylesheet" href="style.css" /> -->
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style>
+      .container {
+        height: 400px;
+      }
+
+      a {
+        color: #6da5c0;
+        text-decoration: none;
+        font-size: 25px;
+      }
+
+      a:hover {
+        color: #0c7075;
+      }
+    </style>
+  </head>
+
+  <body>
+    <a href="{% url 'index' %}" id="home-button">Home</a>
+    <p style="display: none">{{ alertValue }}</p>
+    <div class="container">
+      <h1>Login</h1>
+      <!-- <form id="loginForm" onsubmit="return validateForm()"> -->
+      <form id="loginForm" method="post" action="{% url 'Login' %}">
+        {% csrf_token %}
+        <input
+          type="text"
+          id="username"
+          placeholder="Username"
+          name="usr"
+          required
+        />
+        <br />
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          name="pwd"
+          required
+        />
+        <p>
+          <a href="{% url 'forgotpassword' %}" style="font-size: 20px"
+            >Forgot Password?</a
+          >
+        </p>
+        <button type="submit" class="button">Login</button>
+      </form>
+      <p>
+        New user?
+        <a href="{% url 'signup' %}" style="font-size: 20px">Sign Up</a>
+      </p>
+    </div>
+
+    <script>
+      function validateForm() {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+
+        if (username === "" || password === "") {
+          alert("Both username and password are required.");
+          return false;
+        }
+        alert("Logged in successfully!");
+        return true;
+      }
+
+      function logIn() {
+        if (validateForm()) {
+          window.location.replace("dashboard.html");
+        }
+      }
+    </script>
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style>
+      ul {
+        width: 600px;
+        margin-left: 0;
+        padding-left: 0;
+      }
+
+      .dashboard-container {
+        text-align: center;
+        margin-top: 50px;
+        margin-left: 0;
+        position: relative;
+        display: flex;
+        justify-content: left;
+        align-items: flex-start;
+        max-height: 100vh;
+      }
+
+      .dashboard-header {
+        position: fixed;
+        top: 130px;
+        left: 10px;
+        z-index: 1;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .dashboard-header ul {
+        margin-left: -20px;
+        padding-left: 0;
+        list-style-type: none;
+        max-height: calc(100vh - 260px);
+        width: 100%;
+        overflow-y: hidden;
+        text-align: left;
+        padding-left: 10px;
+      }
+
+      .dashboard-header ul:hover {
+        overflow-y: auto;
+      }
+
+      .dashboard-header ul li {
+        color: #5beff7;
+        padding: 10px 20px;
+        position: relative;
+      }
+
+      .dashboard-header ul li:hover {
+        background-color: #0f969c;
+        color: #072e33;
+        font-weight: bold;
+      }
+
+      .dashboard-header ul li::after {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #0f969c;
+      }
+
+      /* scroll wheel */
+      .dashboard-header ul::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      .dashboard-header ul::-webkit-scrollbar-thumb {
+        background-color: #6da5c0;
+        border-radius: 5px;
+      }
+
+      .dashboard-header ul::-webkit-scrollbar-thumb:hover {
+        background-color: #0f969c;
+      }
+    </style>
+  </head>
+
+  <body class="dashboard_body">
+    <p style="display: none">{{ alertValue }}</p>
+    <div id="welcome-user">Welcome, User!</div>
+    <div class="navbar">
+      <a class="t" href="{% url 'add' %}">Add</a>
+      <a href="{% url 'edit' %}">Edit</a>
+      <a href="{% url 'search' %}">Search</a>
+      <a href="{% url 'delete' %}">Delete</a>
+      <a href="{% url 'update' %}">Update Profile</a>
+      <a href="{% url 'dashboard' %}" id="signOutButton" class="sign-out"
+        >Sign Out</a
+      >
+      <script>
+        function confirmSignOut() {
+          var confirmation = confirm("Are you sure you want to sign out?");
+          if (confirmation) {
+            window.location.replace("{% url 'Redirect' %}");
+          }
+        }
+
+        document
+          .getElementById("signOutButton")
+          .addEventListener("click", function (e) {
+            e.preventDefault();
+            confirmSignOut();
+          });
+      </script>
+    </div>
+
+    <div class="dashboard-container">
+      <div class="dashboard-header">
+        <h2 style="font-size: 45px; text-align: left">Contacts</h2>
+
+        <!-- <ul class="contact-list">
+          {% for user in user_data %}
+          <li><b>{{user.first_name }}</b></li>
+
+          {% endfor %}
+        </ul> -->
+        {% for user in user_data %}
+        <div class="contact-card">
+          <h3 onmouseover="expandCard(this)" onmouseout="collapseCard(this)">
+            {{user.name}}
+          </h3>
+          <div class="additional-info">
+            <p>{{user.phone}}<br />{{user.email}}</p>
+          </div>
+        </div>
+
+        {% endfor %}
+      </div>
+    </div>
+    <script>
+      function expandCard(nameElement) {
+        const card = nameElement.parentElement;
+        const info = card.querySelector(".additional-info");
+
+        info.style.display = "block";
+        card.classList.add("expanded");
+      }
+
+      function collapseCard(nameElement) {
+        const card = nameElement.parentElement;
+        const info = card.querySelector(".additional-info");
+
+        info.style.display = "none";
+        card.classList.remove("expanded");
+      }
+    </script>
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
+</html>

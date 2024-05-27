@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Contact</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <style>
+    .container {
+      height: 270px;
+      margin-top: 125px;
+    }
+  </style>
+</head>
+
+<body>
+  <p style="display: none">{{ alertValue }}</p>
+  <a href="{% url 'dashboard' %}" id="home-button">Home</a>
+  <div id="welcome-user">Welcome, User!</div>
+  <div class="navbar">
+    <a href="{% url 'add' %}">Add</a>
+    <a href="{% url 'edit' %}" class="highlight" style="color: #05161a">Edit</a>
+    <a href="{% url 'search' %}">Search</a>
+    <a href="{% url 'delete' %}">Delete</a>
+    <a href="{% url 'update' %}">Update Profile</a>
+    <a href="{% url 'Redirect' %}" id="signOutButton" class="sign-out">Sign Out</a>
+    <script>
+      function confirmSignOut() {
+        var confirmation = confirm("Are you sure you want to sign out?");
+        if (confirmation) {
+          window.location.replace("{% url 'Redirect' %}");
+        }
+      }
+
+      document.getElementById("signOutButton").addEventListener("click", function (e) {
+        e.preventDefault();
+        confirmSignOut();
+      });
+    </script>
+  </div>
+
+  <div class="container">
+    <h2>Edit Contact</h2>
+    <form id="editContactForm" method="post" action="{% url 'Edit' %}">
+      {% csrf_token %}
+      <input type="text" name="searchData" class="edit-form-input" placeholder="Enter First Name or Number" required>
+      <!-- <button type="submit">Search</button> -->
+      <br />
+      <table>
+        <tr>
+          <td><button type="submit" class="button">Search</button></td>
+          <td><input type="reset" class="button" value="Cancel" /></td>
+        </tr>
+      </table>
+    </form>
+    {% if result %}
+    <form id="editContactForm" method="post" action="">
+      {% csrf_token %}
+      <input type="text" name="first_name" class="edit-form-input" placeholder="First Name" value="{{ result.name }}"
+        required>
+      <br>
+      <input type="text" name="last_name" class="edit-form-input" placeholder="Last Name" value="{{ result.last_name }}"
+        required>
+      <br>
+      <input type="text" name="phone" class="edit-form-input" placeholder="Phone Number" value="{{ result.phone }}"
+        required>
+      <br>
+      <input type="email" name="email" class="edit-form-input" placeholder="Email" value="{{ result.email }}" required>
+      <br>
+      <!-- Add other fields as needed -->
+      <table>
+        <tr>
+          <td><button type="submit" class="button">Edit</button></td>
+          <td><input type="reset" class="button" value="Cancel" /></td>
+        </tr>
+      </table>
+    </form>
+    {% else %}
+    <!-- <p>No contact found.</p> -->
+    {% endif %}
+  </div>
+
+  <script>
+    // Function to make input fields editable on double-click
+    function makeEditable(elementId) {
+      var element = document.getElementById(elementId);
+      element.removeAttribute("readonly");
+      element.focus();
+    }
+
+    // Function to validate the edit contact form
+    function validateEditContactForm(event) {
+      event.preventDefault(); // Prevent default form submission behavior
+
+      var editFirstName = document.getElementById("editFirstName").value;
+      var editLastName = document.getElementById("editLastName").value;
+      var editPhoneNumber = document.getElementById("editPhoneNumber").value;
+      var editEmail = document.getElementById("editEmail").value;
+      var editContactPhoto = document.getElementById("editContactPhoto").value;
+
+      if (!editFirstName || !editLastName || !editPhoneNumber || !editEmail) {
+        alert("Please fill in all required fields.");
+        return false;
+      }
+
+      // Basic email format validation
+      var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      if (!emailPattern.test(editEmail)) {
+        alert("Please enter a valid email address.");
+        return false;
+      }
+
+      return true;
+    }
+
+    // Event listeners for double-click to make input fields editable
+    document.getElementById("editFirstName").addEventListener("dblclick", function () {
+      makeEditable("editFirstName");
+    });
+    document.getElementById("editLastName").addEventListener("dblclick", function () {
+      makeEditable("editLastName");
+    });
+    document.getElementById("editPhoneNumber").addEventListener("dblclick", function () {
+      makeEditable("editPhoneNumber");
+    });
+    document.getElementById("editEmail").addEventListener("dblclick", function () {
+      makeEditable("editEmail");
+    });
+    document.getElementById("editContactPhoto").addEventListener("dblclick", function () {
+      makeEditable("editContactPhoto");
+    });
+
+    // Form submission validation
+    document.getElementById("editContactForm").addEventListener("submit", function (e) {
+      if (!validateEditContactForm()) {
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+    <style>
+      .container_search {
+        height: 280px;
+        margin-top: 125px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <p style="display: none">{{ alertValue }}</p>
+    <a href="{% url 'dashboard' %}" id="home-button">Home</a>
+    <div id="welcome-user">Welcome, User!</div>
+    <div class="navbar">
+      <a href="{% url 'add' %}">Add</a>
+      <a href="{% url 'edit' %}">Edit</a>
+      <a href="{% url 'search' %}" class="highlight" style="color: #05161a"
+        >Search</a
+      >
+      <a href="{% url 'delete' %}">Delete</a>
+      <a href="{% url 'update' %}">Update Profile</a>
+      <a href="{% url 'search' %}" id="signOutButton" class="sign-out"
+        >Sign Out</a
+      >
+      <script>
+        function confirmSignOut() {
+          var confirmation = confirm("Are you sure you want to sign out?");
+          if (confirmation) {
+            window.location.replace("{% url 'search' %}");
+          }
+        }
+
+        document
+          .getElementById("signOutButton")
+          .addEventListener("click", function (e) {
+            e.preventDefault();
+            confirmSignOut();
+          });
+      </script>
+    </div>
+    <div class="container_search">
+      <h2>Search Contact</h2>
+      <table>
+        <tr>
+          <th>Name:</th>
+          <td>{{name}}</td>
+        </tr>
+        <tr>
+          <th>Contact No.:</th>
+          <td>{{phone}}</td>
+        </tr>
+        <tr>
+          <th>Email:</th>
+          <td>{{email}}</td>
+        </tr>
+      </table>
+    </div>
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <!-- <link rel="stylesheet" href="style.css" /> -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style>
+      .container {
+        height: 460px;
+        margin-top: 125px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <a href="{% url 'dashboard' %}" id="home-button">Home</a>
+    <div id="welcome-user">Welcome, User!</div>
+    <div class="navbar">
+      <a href="{% url 'add' %}" class="highlight" style="color: #05161a">Add</a>
+      <a href="{% url 'edit' %}">Edit</a>
+      <a href="{% url 'search' %}">Search</a>
+      <a href="{% url 'delete' %}">Delete</a>
+      <a href="{% url 'update' %}">Update Profile</a>
+      <a href="{% url 'Redirect' %}" id="signOutButton" class="sign-out"
+        >Sign Out</a
+      >
+      <script>
+        function confirmSignOut() {
+          var confirmation = confirm("Are you sure you want to sign out?");
+          if (confirmation) {
+            window.location.replace("{% url 'Redirect' %}");
+          }
+        }
+
+        document
+          .getElementById("signOutButton")
+          .addEventListener("click", function (e) {
+            e.preventDefault();
+            confirmSignOut();
+          });
+      </script>
+    </div>
+
+    <p style="display: none">{{ alertValue }}</p>
+    <div class="container">
+      <h2>Add Contact</h2>
+      <!-- <form
+        id="contactForm"
+        onsubmit="return validateContactForm()"
+        method="post"
+      > -->
+      <form id="contactForm" action="{% url 'Add' %}" method="post">
+        {% csrf_token %}
+        <input type="text" placeholder="First Name" name="fn" required />
+        <br />
+        <input type="text" placeholder="Last Name" name="ln" required />
+        <br />
+        <input type="text" placeholder="Phone Number" name="pn" required />
+        <br />
+        <input type="email" placeholder="Email" name="em" required />
+        <br />
+        <input
+          type="file"
+          accept="image/*"
+          name="img"
+          placeholder="Contact Photo"
+        />
+        <br />
+        <table>
+          <tr>
+            <td><button type="submit" class="button">Add</button></td>
+            <td><input type="reset" class="button" value="Cancel" /></td>
+          </tr>
+        </table>
+      </form>
+    </div>
+
+    <script>
+      function validateContactForm() {
+        var firstName = document.getElementById("firstName").value;
+        var lastName = document.getElementById("lastName").value;
+        var phoneNumber = document.getElementById("phoneNumber").value;
+        var email = document.getElementById("email").value;
+        var contactPhoto = document.getElementById("contactPhoto").value;
+
+        if (firstName.trim() === "") {
+          alert("Please enter First Name.");
+          return false;
+        }
+
+        if (lastName.trim() === "") {
+          alert("Please enter Last Name.");
+          return false;
+        }
+
+        if (!/^\d{10}$/.test(phoneNumber)) {
+          alert("Please enter a valid 10-digit phone number.");
+          return false;
+        }
+
+        var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        if (!emailPattern.test(email)) {
+          alert("Please enter a valid email address.");
+          return false;
+        }
+
+        return true;
+      }
+    </script>
+
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <!-- <link rel="stylesheet" href="style.css" /> -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style>
+      .container {
+        height: 430px;
+        margin-top: 150px;
+      }
+
+      .password-fields {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <a href="{% url 'dashboard' %}" id="home-button">Home</a>
+    <div id="welcome-user">Welcome, User!</div>
+    <div class="navbar">
+      <a href="{% url 'add' %}">Add</a>
+      <a href="{% url 'edit' %}">Edit</a>
+      <a href="{% url 'search' %}">Search</a>
+      <a href="{% url 'delete' %}">Delete</a>
+      <a href="{% url 'update' %}" class="highlight" style="color: #05161a"
+        >Update Profile</a
+      >
+      <a href="{% url 'Redirect' %}" id="signOutButton" class="sign-out"
+        >Sign Out</a
+      >
+      <script>
+        function confirmSignOut() {
+          var confirmation = confirm("Are you sure you want to sign out?");
+          if (confirmation) {
+            window.location.replace("{% url 'Redirect' %}");
+          }
+        }
+
+        document
+          .getElementById("signOutButton")
+          .addEventListener("click", function (e) {
+            e.preventDefault();
+            confirmSignOut();
+          });
+      </script>
+    </div>
+
+    <p style="display: none">{{ alertValue }}</p>
+
+    <div class="container">
+      <h2>Update Profile</h2>
+      <form id="updateProfileForm" action="{% url 'Update' %}" method="post">
+        <!-- <form
+        id="updateProfileForm"
+        onsubmit="return validateUpdateProfileForm()"
+      > -->
+        {% csrf_token %}
+        <input
+          type="text"
+          class="update-form-input"
+          id="updateName"
+          placeholder="Name"
+          name="newname"
+          required
+        />
+        <br />
+        <input
+          type="text"
+          class="update-form-input"
+          id="updateUsername"
+          placeholder="Username"
+          required
+          name="newusername"
+        />
+        <br />
+        <input
+          type="email"
+          class="update-form-input"
+          id="updateEmail"
+          placeholder="Email"
+          required
+          name="newemail"
+        />
+        <br />
+        <input
+          type="password"
+          class="update-form-input"
+          id="updatePassword"
+          placeholder="Old Password"
+          readonly
+          name="oldpassword"
+          onclick="showPasswordFields()"
+        />
+        <br />
+        <div class="password-fields">
+          <input
+            type="password"
+            class="update-form-input"
+            id="newPassword"
+            placeholder="New Password"
+            name="newpassword"
+          />
+          <br />
+          <input
+            type="password"
+            class="update-form-input"
+            id="confirmNewPassword"
+            placeholder="Confirm New Password"
+            name="confirmnewpassword"
+          />
+          <br />
+        </div>
+        <table>
+          <tr>
+            <td><button type="submit" class="button">Update</button></td>
+            <td><input type="reset" class="button" value="Cancel" /></td>
+          </tr>
+        </table>
+      </form>
+    </div>
+
+    <script>
+      function validateUpdateProfileForm() {
+        var updateName = document.getElementById("updateName").value;
+        var updateUsername = document.getElementById("updateUsername").value;
+        var updateEmail = document.getElementById("updateEmail").value;
+
+        if (
+          updateName.trim() === "" ||
+          updateUsername.trim() === "" ||
+          updateEmail.trim() === ""
+        ) {
+          alert("Name, Username, and Email are required fields.");
+          return false;
+        }
+
+        if (document.getElementById("updatePassword")) {
+          var oldPassword = document.getElementById("updatePassword").value;
+          var newPassword = document.getElementById("newPassword").value;
+          var confirmNewPassword =
+            document.getElementById("confirmNewPassword").value;
+
+          if (
+            oldPassword.trim() === "" ||
+            newPassword.trim() === "" ||
+            confirmNewPassword.trim() === ""
+          ) {
+            alert("Please fill in all password fields.");
+            return false;
+          }
+
+          if (newPassword !== confirmNewPassword) {
+            alert("New Password and Confirm New Password must match.");
+            return false;
+          }
+        }
+
+        return true;
+      }
+
+      function showPasswordFields() {
+        var passwordFields = document.querySelector(".password-fields");
+        var passwordInput = document.getElementById("updatePassword");
+        var updateContainer = document.querySelector(".container");
+
+        if (passwordInput.readOnly === true) {
+          passwordInput.readOnly = false;
+          passwordFields.style.display = "block";
+          updateContainer.style.height = "555px";
+        } else {
+          passwordInput.readOnly = true;
+          passwordFields.style.display = "none";
+          updateContainer.style.height = "430px";
+        }
+      }
+    </script>
+
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up</title>
+  <!-- <link rel="stylesheet" href="style.css" /> -->
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <style>
+    .container {
+      height: 520px;
+    }
+
+    a {
+      color: #6da5c0;
+      text-decoration: none;
+      font-size: 25px;
+    }
+
+    a:hover {
+      color: #0c7075;
+    }
+  </style>
+</head>
+
+<body>
+  <p style="display: none">{{ alertValue }}</p>
+  <a href="{% url 'index' %}" id="home-button">Home</a>
+  <div class="container">
+    <h1>Sign Up</h1>
+    <!-- <form id="signupForm" onsubmit="return validateForm()"> -->
+    <form id="signupForm" action="{% url 'SignUp' %}" method="post">
+      {% csrf_token %}
+      <input type="text" id="name" placeholder="Name" name="nm" required />
+      <br />
+      <input type="email" id="email" placeholder="Email" name="eml" required />
+      <br />
+      <input type="text" id="username" placeholder="Username" name="usr" required />
+      <br />
+      <input type="password" id="password" placeholder="Password" name="pwd" required />
+      <br />
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" name="cpwd" required />
+      <br />
+      <button type="submit" class="button">Sign Up</button>
+    </form>
+    <p>
+      Already have an account?
+      <a href="{% url 'login' %}" style="font-size: 20px">Login</a>
+    </p>
+  </div>
+
+  <script>
+    function validateForm() {
+      var username = document.getElementById("username").value;
+      var password = document.getElementById("password").value;
+      var confirmPassword = document.getElementById("confirmPassword").value;
+
+      if (username === "" || password === "" || confirmPassword === "") {
+        alert("All fields are required.");
+        return false;
+      }
+
+      if (password !== confirmPassword) {
+        alert("Password and Confirm Password do not match.");
+        return false;
+      }
+
+      // alert("Signed up successfully!");
+      window.location.href = "{% url 'SignUp' %}";
+      return false;
+    }
+  </script>
+  <script>
+    window.onload = function () {
+      var pValue = document.querySelector("p").textContent;
+      //signup successful
+      if (pValue.trim() === "signup") {
+        alert("Sign Up Successful.");
+        window.location.href = "/login";
+      }
+      //signup unsuccessful
+      else if (pValue.trim() === "signout") {
+        alert("Sign Out Successful.");
+        window.location.href = "/";
+      }
+      //password not matched
+      else if (pValue.trim() === "pwdnomatch") {
+        alert("Passwords Didn't Match.\nPlease Try Again..");
+        window.location.href = "/signup";
+      }
+      //server errors
+      else if (pValue.trim() === "server") {
+        alert("Server Error Occured.\nPlease Try Again..");
+        window.location.href = "/";
+      } else if (pValue.trim() === "serverdb") {
+        alert("Couldn't Connect Database.\nPlease Try Again..");
+        window.location.href = "/";
+      } else if (pValue.trim() === "django") {
+        alert("DJango Error.\nPlease Try Again..");
+        window.location.href = "/";
+      }
+    };
+  </script>
+</body>
+
+</html>
